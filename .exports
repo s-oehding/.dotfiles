@@ -1,0 +1,9 @@
+# Locale
+#
+export LANG='de_DE.UTF-8';
+export LC_ALL='de_DE.UTF-8';
+
+# Python
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr. (Ansible)
+#
+export PYTHONIOENCODING='UTF-8';
