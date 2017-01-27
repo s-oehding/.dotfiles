@@ -87,3 +87,16 @@ export NVM_DIR="/Users/mono/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 # 02 -NPM Settings
 # 03 -YO Settings
+
+# Add `~/bin` to the `$PATH`
+# 
+export PATH="$HOME/bin:$PATH";
+
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+# 
+for file in ~/.{exports,aliases}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
