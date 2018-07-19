@@ -78,20 +78,6 @@ export LANG=de_DE.UTF-8
 #
 export SSH_KEY_PATH="~/.ssh/id_rsa"
 
-#
-# Tilix
-#
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-    source /etc/profile.d/vte.sh
-fi
-
-#
-# Source vte.sh for Tilix
-#
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte.sh
-fi
-
 #-----------------------------------------------------------------------------------------------
 #
 # Node.js
@@ -119,3 +105,27 @@ for file in ~/.{exports,aliases}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+###-tns-completion-start-###
+if [ -f /home/mono/.tnsrc ]; then 
+    source /home/mono/.tnsrc 
+fi
+###-tns-completion-end-###
+
+export ANDROID_HOME=~/Android/Sdk
+export PATH=~/Android/Sdk/tools:~/Android/Sdk/tools/bin:$PATH
+
+#-----------------------------------------------------------------------------------------------
+#
+# OS Based custom config
+#
+#-----------------------------------------------------------------------------------------------
+
+#
+# Source vte.sh for Tilix on Ubuntu 18
+#
+OS_FLAVOUR=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+OS_CODENAME=$(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release)
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+    source /etc/profile.d/vte.sh
+fi
