@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #-----------------------------------------------------------------------------------------------
 #
 # $PATH Config
@@ -9,6 +16,7 @@
 # Path to your oh-my-zsh installation.
 #
 export ZSH=/home/mono/.oh-my-zsh
+export TERM="xterm-256color"
 
 #-----------------------------------------------------------------------------------------------
 #
@@ -21,7 +29,8 @@ export ZSH=/home/mono/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #
-ZSH_THEME="powerlevel9k/powerlevel9k"
+#ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME=powerlevel10k/powerlevel10k
 
 #POWERLEVEL9K_MODE='awesome-patched'
 POWERLEVEL9K_MODE='awesome-fontconfig'
@@ -30,9 +39,15 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_ALWAYS_SHOW_CONTEXT=false
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="┌"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="└[$] "
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status battery)
 
 POWERLEVEL9K_HOME_ICON=''
+
+POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
+POWERLEVEL9K_VCS_INCOMING_CAHNGES_ICON="↓"
+POWERLEVEL9K_VCS_OUTGOING_CAHNGES_ICON="↑"
 
 POWERLEVEL9K_CONTEXT_TEMPLATE="%n@`hostname -f`"
 POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND="yellow"
@@ -54,13 +69,14 @@ HIST_STAMPS="dd.mm.yyyy"
 # ZSH Plugins
 #
 plugins=(
-  docker  git zsh-syntax-highlighting zsh-autosuggestions
+  docker git vundle zsh-syntax-highlighting zsh-autosuggestions
 )
 
 #
 # Load ZSH
 #
 source $ZSH/oh-my-zsh.sh
+export PAGER="most"
 
 #-----------------------------------------------------------------------------------------------
 #
@@ -90,59 +106,35 @@ export SSH_KEY_PATH="~/.ssh/id_rsa"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-#-----------------------------------------------------------------------------------------------
-#
-# .dotfiles
-#
-#-----------------------------------------------------------------------------------------------
-
-#
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-# 
-for file in ~/.{exports,aliases}; do
-	[ -r "$file" ] && [ -f "$file" ] && source "$file";
-done;
-unset file;
-###-tns-completion-start-###
-if [ -f /home/mono/.tnsrc ]; then 
-    source /home/mono/.tnsrc 
-fi
-###-tns-completion-end-###
-
-export ANDROID_HOME=~/Android/Sdk
-export PATH=~/Android/Sdk/tools:~/Android/Sdk/tools/bin:$PATH
-
-#-----------------------------------------------------------------------------------------------
-#
-# Node.js
-#
-#-----------------------------------------------------------------------------------------------
-
-#
-# 01. NVM Source Command
-#
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 #
 # 02. Yarn Path
-# 
+#
 export PATH="$PATH:`yarn global bin`"
 
 #-----------------------------------------------------------------------------------------------
 #
-# OS Based custom config
+# MongoDb
 #
 #-----------------------------------------------------------------------------------------------
 
 #
-# Source vte.sh for Tilix on Ubuntu 18
+# 01. Mongo Version manager binary path
 #
-OS_FLAVOUR=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
-OS_CODENAME=$(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release)
+export PATH=~/.mongodb/versions/mongodb-current/bin:$PATH
 
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-    source /etc/profile.d/vte.sh
-fi
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pulse/extra/usr/lib/x86_64-linux-gnu/
+
+#-----------------------------------------------------------------------------------------------
+#
+# Mondia Media specific
+#
+#-----------------------------------------------------------------------------------------------
+
+#
+# Nomad
+#
+export NOMAD_ADDR=http://nomad.service.consul:4646
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
